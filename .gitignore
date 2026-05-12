@@ -1,0 +1,12 @@
+backend/vendor/
+backend/node_modules/
+backend/.env
+backend/storage/*.key
+backend/public/storage
+backend/public/build
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/testing/*
+backend/storage/framework/views/*
+backend/database/*.sqlite
+backend/database/*.sqlite-journal
