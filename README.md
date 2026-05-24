@@ -77,3 +77,6 @@ php artisan test
 - **Frontend:** Next.js 15, TypeScript, Tailwind CSS.
 - **Realtime:** Laravel Reverb (WebSockets).
 - **Auth:** JWT with RBAC.
+
+---
+*Last updated: Final verification complete.*
