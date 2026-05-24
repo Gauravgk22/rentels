@@ -1,70 +1,79 @@
 # AWISH RENTALS — Unified AI-Powered Rental Ecosystem Platform
 
 ## Overview
-AWISH RENTALS is an enterprise-grade, scalable unified rental infrastructure platform designed to handle both Property and Vehicle rentals in a single ecosystem. It provides a robust foundation for marketplace operations, fleet management, and property ERP.
+AWISH RENTALS is an enterprise-grade, scalable unified rental infrastructure platform designed to handle both Property and Vehicle rentals in a single ecosystem.
+
+## Local Setup Guide (XAMPP / Manual Installation)
+
+### 1. Prerequisites
+- **XAMPP** (PHP 8.3+, MySQL)
+- **Composer** (PHP Package Manager)
+- **Node.js & npm** (v20+)
+
+### 2. Database Setup
+1. Open XAMPP Control Panel and start **Apache** and **MySQL**.
+2. Open **phpMyAdmin** (`http://localhost/phpmyadmin`).
+3. Create a new database named `awish_rentals`.
+
+### 3. Backend Setup (Laravel)
+1. Open your terminal in the `backend` directory.
+2. Copy the environment file:
+   ```bash
+   cp .env.example .env
+   ```
+3. Update `.env` with your database credentials (usually `root` and empty password for XAMPP):
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=awish_rentals
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+4. Install dependencies and generate keys:
+   ```bash
+   composer install
+   php artisan key:generate
+   php artisan jwt:secret
+   php artisan migrate
+   ```
+5. Start the backend server:
+   ```bash
+   php artisan serve --port=7000
+   ```
+
+### 4. Frontend Setup (Next.js)
+1. Open a new terminal in the `frontend` directory.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev -- -p 4000
+   ```
+
+## Testing Functionality
+
+### API Documentation (Swagger)
+- **URL:** `http://localhost:7000/api/documentation`
+- Use this to test all endpoints (Auth, Properties, Vehicles, Bookings, Wallet) interactively.
+
+### Core Flows to Test
+1. **User Auth:** Register a new user at `POST /api/auth/register`, then login at `POST /api/auth/login` to get your JWT token.
+2. **Postings:** Create a Property or Vehicle using the authenticated token.
+3. **Search:** Filter rentals by city or type.
+4. **GPS Tracking:** Send a POST request to `/api/vehicles/{id}/gps` to simulate real-time location updates.
+5. **Wallet:** Deposit "money" and check balance.
+
+### Automated Tests
+Run the following in the `backend` folder to verify the entire core logic:
+```bash
+php artisan test
+```
 
 ## Tech Stack
-- **Backend:** Laravel 11.x, PHP 8.3+, Modular Monolith Architecture.
-- **Frontend:** Next.js 15, TypeScript, Tailwind CSS, Framer Motion.
-- **Database:** MySQL 8+ (Optimized schema with proper indexing).
-- **Realtime:** Laravel Reverb (WebSockets) for GPS tracking and live updates.
-- **Cache & Queues:** Redis, Laravel Horizon.
-- **Auth:** JWT (JSON Web Tokens) with Centralized RBAC.
-- **API Doc:** Swagger/OpenAPI.
-
-## System Architecture
-
-### Modular Monolith
-The backend is organized into functional modules to ensure high cohesion and low coupling, allowing for future microservices migration:
-- **Auth:** Identity management and RBAC.
-- **Property:** Residential and Commercial property management.
-- **Vehicle:** Cars, Bikes, and EV fleet management.
-- **Booking:** Unified reservation engine with state machine logic.
-- **Wallet:** Financial ledger, escrow, and payment settlements.
-- **Notification:** Multi-channel (Email, SMS, Push, In-app).
-- **Core:** Shared infrastructure (Repositories, Services, AI Gateway).
-
-### Database Architecture
-Designed for high performance and scalability.
-- **Users/Roles/Permissions:** Polymorphic RBAC.
-- **Properties/Vehicles:** Specialized schemas with geographic indexing.
-- **Bookings:** Morphic relationships to handle any "bookable" entity.
-- **Wallets/Transactions:** Double-entry bookkeeping principle for financial integrity.
-- **GPS Logs:** Time-series optimized logs for real-time tracking.
-
-## AI Infrastructure
-The platform includes an `AiGateway` service designed to integrate with LLMs and Machine Learning models for:
-- Smart Pricing Recommendations.
-- Fraud Detection in Transactions.
-- Personalized User Recommendations.
-- Occupancy and Demand Prediction.
-
-## Development & Deployment
-
-### Local Setup
-1. **Backend:**
-   ```bash
-   cd backend
-   composer install
-   php artisan migrate
-   php artisan jwt:secret
-   php artisan serve
-   ```
-2. **Frontend:**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-
-### Docker Support
-A `docker-compose.yml` is provided in the `backend` directory for a full-stack environment including MySQL, Redis, and Mailpit.
-
-### Deployment Guide
-- **VPS:** Recommended Ubuntu 22.04+ with NGINX and Supervisor for Horizon/Reverb.
-- **cPanel:** Supported via standard PHP/MySQL deployment with shell access for artisan commands.
-- **CI/CD:** Pipelines ready for GitHub Actions or GitLab CI.
-
-## Future Scalability
-- **Mobile Apps:** APIs are designed with an API-first approach, ready for Flutter/React Native integration.
-- **Microservices:** Modules can be extracted into independent services thanks to the Repository/Service pattern separation.
+- **Backend:** Laravel 11, PHP 8.3, Modular Monolith.
+- **Frontend:** Next.js 15, TypeScript, Tailwind CSS.
+- **Realtime:** Laravel Reverb (WebSockets).
+- **Auth:** JWT with RBAC.
